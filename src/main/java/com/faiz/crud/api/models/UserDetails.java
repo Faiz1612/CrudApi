@@ -16,10 +16,18 @@ public class UserDetails {
 		private int userId;		
 		@Column(name = "name", nullable = false)
 		private String userName;
-		@Column(name = "technology", nullable = false)
-		private String userTechnology;
-		
-		public UserDetails() {
+		@Column(name = "password", nullable = false)
+		private String password;
+
+	public String getPassWord() {
+		return password;
+	}
+
+	public void setPassWord(String passWord) {
+		this.password = password;
+	}
+
+	public UserDetails() {
 			super();
 		}
 		
@@ -27,7 +35,6 @@ public class UserDetails {
 			super();
 			this.userId = userId;
 			this.userName = userName;
-			this.userTechnology = userTechnology;
 		}
 
 		public int getUserId() {
@@ -42,12 +49,6 @@ public class UserDetails {
 		public void setUserName(String userName) {
 			this.userName = userName;
 		}
-		public String getUserTechnology() {
-			return userTechnology;
-		}
-		public void setUserTechnology(String userTechnology) {
-			this.userTechnology = userTechnology;
-		}
-		
+
 		
 }

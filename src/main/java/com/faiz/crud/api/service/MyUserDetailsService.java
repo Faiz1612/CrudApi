@@ -1,6 +1,7 @@
 package com.faiz.crud.api.service;
 
 import com.faiz.crud.api.models.MyUserDetails;
+import com.faiz.crud.api.models.UserInformation;
 import com.faiz.crud.api.repositories.UserRepositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +18,12 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       Optional<com.faiz.crud.api.models.UserDetails> userDetails = userRepositories.findByUserName(username);
-       userDetails.orElseThrow(()-> new UsernameNotFoundException(username + "Not Found"));
-       return (UserDetails) userDetails.map(userDetails1 -> new MyUserDetails(userDetails)).get();
+        Optional<UserInformation> userInformation = userRepositories.findById(username);
+        if(userInformation.isPresent()){
+            return new MyUserDetails(userInformation.get());
+        }
+       else {
+           throw new UsernameNotFoundException("User Not Found");
+        }
     }
 }

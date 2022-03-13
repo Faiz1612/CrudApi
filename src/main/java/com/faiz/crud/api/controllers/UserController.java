@@ -2,19 +2,18 @@ package com.faiz.crud.api.controllers;
 
 import java.util.List;
 
+import com.faiz.crud.api.models.UserInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.faiz.crud.api.models.UserDetails;
 import com.faiz.crud.api.repositories.UserRepositories;
 
 @RestController
@@ -25,17 +24,17 @@ public class UserController {
 	private UserRepositories userRepositories;
 	
 	@GetMapping("/users")
-	public ResponseEntity<List<UserDetails>> getAllUser()
+	public ResponseEntity<List<UserInformation>> getAllUser()
 	{
 		return ResponseEntity.ok(userRepositories.findAll());
 	}
 	
 	@SuppressWarnings("rawtypes")
-	@GetMapping("/users/{id}")
-	public ResponseEntity getUserById(@PathVariable(value = "id") int userId)
+	@GetMapping("/users/{userName}")
+	public ResponseEntity getUserById(@PathVariable(value = "userName") String userName)
 	{
 		try {
-			UserDetails userDetails = userRepositories.findById(userId).orElseThrow(null);
+			UserInformation userDetails = userRepositories.findById(userName).orElseThrow(null);
 			return ResponseEntity.ok(userDetails);
 		}
 		catch (Exception e) {
@@ -45,37 +44,21 @@ public class UserController {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	@PostMapping("/users")
-	public ResponseEntity createUser(@RequestBody UserDetails newUserDetails)
+	@PutMapping("/users/{userName}")
+	public ResponseEntity  updateUser(@PathVariable(value = "userName") String userName , @RequestBody UserInformation updatedUserDetails)
 	{
-		if(newUserDetails.getUserId()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("User Id cannot be negative"); 
-		}
-		userRepositories.save(newUserDetails);
-		return ResponseEntity.ok(newUserDetails);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@PutMapping("/users/{id}")
-	public ResponseEntity  updateUser(@PathVariable(value = "id") int userId , @RequestBody UserDetails updatedUserDetails)
-	{
-		if(updatedUserDetails.getUserId()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("User Id cannot be negative"); 
-		}
 		userRepositories.save(updatedUserDetails);
 		return ResponseEntity.ok(updatedUserDetails);
 	}
 	
 	@SuppressWarnings("rawtypes")
-	@DeleteMapping("/users/{id}")
-	public ResponseEntity deleteUser(@PathVariable(value = "id") int userId)
+	@DeleteMapping("/users/{userName}")
+	public ResponseEntity deleteUser(@PathVariable(value = "userName") String userName)
 	{
 		try {
-			
-			UserDetails deletedUserDetails = userRepositories.findById(userId).orElseThrow(null);
-			userRepositories.deleteById(userId);
+
+			UserInformation deletedUserDetails = userRepositories.findById(userName).orElseThrow(null);
+			userRepositories.deleteById(userName);
 			return ResponseEntity.ok(deletedUserDetails);
 		}
 		catch (Exception e){

@@ -5,18 +5,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 public class MyUserDetails implements UserDetails {
 
-    private Optional<com.faiz.crud.api.models.UserDetails> userDetails;
+    private UserInformation userInformation;
 
     public MyUserDetails() {
     }
 
-    public MyUserDetails(Optional<com.faiz.crud.api.models.UserDetails> userDetails) {
-        this.userDetails = userDetails;
+    public MyUserDetails(UserInformation userInformation) {
+        this.userInformation = userInformation;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -25,12 +25,12 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userDetails.get().getPassWord();
+        return userInformation.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userDetails.get().getUserName();
+        return userInformation.getUserName();
     }
 
     @Override
